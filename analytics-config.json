@@ -1,0 +1,1 @@
+{"requests":{"oobCfg":"https://api.anyongtech.cn/ws-oob/cb/ampprobe1/analytics-config-fetched?v=1"},"triggers":{"load":{"on":"visible","request":"oobCfg"}}}

