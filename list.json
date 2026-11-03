@@ -1,1 +1,1 @@
-{"items":[{"item":"plain-text-item","htmlProbe":"{{htmlProbe}} mustache","linkProbe":"https://ithrael.github.io/amp-sec-test/landed.html"},{"item":"<img src=x onerror=console.log('XSS-LIST-JSON')>","htmlProbe":"<b>bold</b>","linkProbe":"javascript:console.log('XSS-LIST-LINK')"}]}
+{"items":[{"item":"plain-text-item","htmlProbe":"<img src=x onerror=console.log('XSS-LIST-IMG')>","linkProbe":"javascript:console.log('XSS-LIST-LINK')"},{"item":"{{escaped-braces}}","htmlProbe":"<b>bold</b>","linkProbe":"https://ithrael.github.io/amp-sec-test/landed.html"}]}
